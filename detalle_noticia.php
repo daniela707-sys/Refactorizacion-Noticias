@@ -1,162 +1,138 @@
-<?php
-$auth = isset($_COOKIE['runnerSession']) ? true : false;
-$id_noticia = isset($_GET['id']) ? $_GET['id'] : null;
-
-$username = 'front@gmail.com';
-$password = 'aprendiz23';
-$auth_header = base64_encode("$username:$password");
-?>
 <!DOCTYPE html>
 <html style="min-width: 300px;" lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Red Emprender</title>
+    <title> Red Emprender </title>
+    <!-- favicons Icons -->
     <link rel="apple-touch-icon" sizes="180x180" href="assets/images/logo/logo1.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="assets/images/logo/logo1.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="assets/images/logo/logo1.png" />
-    
+    <link rel="manifest" href="assets/images/favicons/site.webmanifest" />
+    <meta name="description" content="ogenix HTML 5 Template " />
+
+    <!-- fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500&family=Manrope:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
     <link rel="stylesheet" href="assets/vendors/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="assets/vendors/animate/animate.min.css" />
+    <link rel="stylesheet" href="assets/vendors/animate/custom-animate.css" />
     <link rel="stylesheet" href="assets/vendors/fontawesome/css/all.min.css" />
+    <link rel="stylesheet" href="assets/vendors/jarallax/jarallax.css" />
+    <link rel="stylesheet" href="assets/vendors/jquery-magnific-popup/jquery.magnific-popup.css" />
+    <link rel="stylesheet" href="assets/vendors/nouislider/nouislider.min.css" />
+    <link rel="stylesheet" href="assets/vendors/nouislider/nouislider.pips.css" />
+    <link rel="stylesheet" href="assets/vendors/odometer/odometer.min.css" />
+    <link rel="stylesheet" href="assets/vendors/swiper/swiper.min.css" />
+    <link rel="stylesheet" href="assets/vendors/ogenix-icons/style.css" />
+    <link rel="stylesheet" href="assets/vendors/tiny-slider/tiny-slider.min.css" />
+    <link rel="stylesheet" href="assets/vendors/reey-font/stylesheet.css" />
+    <link rel="stylesheet" href="assets/vendors/owl-carousel/owl.carousel.min.css" />
+    <link rel="stylesheet" href="assets/vendors/owl-carousel/owl.theme.default.min.css" />
+    <link rel="stylesheet" href="assets/vendors/bxslider/jquery.bxslider.css" />
+    <link rel="stylesheet" href="assets/vendors/bootstrap-select/css/bootstrap-select.min.css" />
+    <link rel="stylesheet" href="assets/vendors/vegas/vegas.min.css" />
+    <link rel="stylesheet" href="assets/vendors/jquery-ui/jquery-ui.css" />
+    <link rel="stylesheet" href="assets/vendors/timepicker/timePicker.css" />
+    <link rel="stylesheet" href="assets/vendors/nice-select/nice-select.css" />
+    <!-- <link rel="stylesheet" href="assets/css/details_evento.css"> -->
+
+    <!-- template styles -->
     <link rel="stylesheet" href="assets/css/app.css">
     <link rel="stylesheet" href="assets/css/ogenix.css">
     <link rel="stylesheet" href="assets/css/ogenix-responsive.css">
-    
-    <style>
-        .banner {
-            height: 60vh;
-            background-size: cover;
-            background-position: center;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            text-align: center;
-            padding: 20px;
-            transition: background-image 1s ease-in-out;
-            width: 100%;
-        }
-        
-        .banner::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 0;
-        }
-        
-        .banner-content {
-            position: relative;
-            z-index: 1;
-            max-width: 1000px;
-        }
-        
-        .banner h1 {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            color: rgb(255, 255, 255);
-        }
-        
-        .banner p {
-            font-size: 1.5rem;
-            margin-bottom: 30px;
-            color: white;
-        }
-        
-        .skeleton-line,
-        .skeleton-image-main,
-        .skeleton-circle {
-            background-color: #f0f0f0;
-            animation: fadeInOut 2s ease-in-out infinite;
-            border-radius: 8px;
-        }
-        
-        @keyframes fadeInOut {
-            0%, 100% { background-color: #f0f0f0; }
-            50% { background-color: #e8e8e8; }
-        }
-        
-        .skeleton-container {
-            padding: 40px 0;
-            min-height: 70vh;
-        }
-        
-        .skeleton-image-main {
-            width: 100%;
-            height: 400px;
-            margin-bottom: 30px;
-            border-radius: 12px;
-        }
-        
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid white;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-    </style>
+
+
+    <!-- Incluye los scripts de Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
 </head>
 
 <body class="custom-cursor">
+
     <div class="preloader">
         <div class="preloader__image"></div>
     </div>
-    
-    <div class="banner" id="banner">
-        <div class="banner-loading" id="banner-loading">
-            <div class="spinner"></div>
-        </div>
-        <div class="banner-content" id="banner-content" style="display: none;">
-            <h1 id="noticia-titulo-banner">¡Noticias!</h1>
-            <p id="noticia-descripcion-banner">Mantente informado</p>
-        </div>
-    </div>
+    <!-- /.preloader -->
+    <?php
+    $username = 'front@gmail.com'; // Reemplaza con tu nombre de usuario
+    $password = 'aprendiz23'; // Reemplaza con tu contraseña
 
+    // Codificar el usuario y contraseña en Base64
+    $auth = base64_encode("$username:$password");
+    ?>
     <div>
+        <!--Subscribe modal-->
         <?php require_once "assets/layout/offerofday.php"; ?>
+        <!--Subscribe header-->
         <?php require_once "assets/layout/header.php"; ?>
-        
-        <main id="main-content">
-            <!-- Contenido dinámico de la noticia -->
-        </main>
-        
+        <!--Subscribe contenido-->
+        <?php require_once "assets/components/detalle_noticia.php"; ?>
+        <!--Subscribe One Start-->
         <?php require_once "assets/layout/subscribe.php"; ?>
+        <!--Subscribe One End-->
         <?php require_once "assets/layout/footer.php"; ?>
     </div>
 
+
+    <script src='assets/js/detalle_noticia.js'></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="assets/vendors/jquery/jquery-3.6.0.min.js"></script>
     <script src="assets/vendors/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="assets/js/detalles_noticia.js"></script>
+    <script src="assets/vendors/jarallax/jarallax.min.js"></script>
+    <script src="assets/vendors/jquery-ajaxchimp/jquery.ajaxchimp.min.js"></script>
+    <script src="assets/vendors/jquery-appear/jquery.appear.min.js"></script>
+    <script src="assets/vendors/jquery-circle-progress/jquery.circle-progress.min.js"></script>
+    <script src="assets/vendors/jquery-magnific-popup/jquery.magnific-popup.min.js"></script>
+    <script src="assets/vendors/jquery-validate/jquery.validate.min.js"></script>
+    <script src="assets/vendors/nouislider/nouislider.min.js"></script>
+    <script src="assets/vendors/odometer/odometer.min.js"></script>
+    <script src="assets/vendors/swiper/swiper.min.js"></script>
+    <script src="assets/vendors/tiny-slider/tiny-slider.min.js"></script>
+    <script src="assets/vendors/wnumb/wNumb.min.js"></script>
+    <script src="assets/vendors/wow/wow.js"></script>
+    <script src="assets/vendors/isotope/isotope.js"></script>
+    <script src="assets/vendors/countdown/jquery.countdown.min.js"></script>
+    <script src="assets/vendors/owl-carousel/owl.carousel.min.js"></script>
+    <script src="assets/vendors/bxslider/jquery.bxslider.min.js"></script>
+    <script src="assets/vendors/bootstrap-select/js/bootstrap-select.min.js"></script>
+    <script src="assets/vendors/vegas/vegas.min.js"></script>
+    <script src="assets/vendors/jquery-ui/jquery-ui.js"></script>
+    <script src="assets/vendors/timepicker/timePicker.js"></script>
+    <script src="assets/vendors/circleType/jquery.circleType.js"></script>
+    <script src="assets/vendors/circleType/jquery.lettering.min.js"></script>
+    <script src="assets/vendors/nice-select/jquery.nice-select.min.js"></script>
+
+
+
+
+
+    <!-- template js -->
     <script src="assets/js/ogenix.js"></script>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            window.addEventListener('load', function() {
-                document.querySelector('.preloader').classList.add('hide');
-            });
-            
-            setTimeout(function() {
-                document.querySelector('.preloader').classList.add('hide');
-            }, 3000);
-        });
-    </script>
 </body>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      window.addEventListener('load', function() {
+        document.querySelector('.preloader').classList.add('hide');
+        document.querySelector('.page-wrapper').classList.add('loaded');
+      });
+      
+      setTimeout(function() {
+        document.querySelector('.preloader').classList.add('hide');
+        document.querySelector('.page-wrapper').classList.add('loaded');
+      }, 3000);
+    });
+</script>
 </html>

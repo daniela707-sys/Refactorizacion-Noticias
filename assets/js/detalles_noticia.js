@@ -177,20 +177,20 @@ function createSkeletonLoader() {
 // FUNCIONES UTILITARIAS
 // =============================================================================
 function ensureRedemprendedoresPath(path) {
-    let nombre_imagen = path.replace(/.*files\//, '');
-    return `/redemprendedores/files/${nombre_imagen}`;
+    const imageName = path.replace(/.*files\//, '');
+    return `/redemprendedores/files/${imageName}`;
 }
 
-function ensurelocalredemprendedores(localPath) {
-    let nombre_imagen = localPath.replace(/.*files\//, '');
-    return `/redemprendedores/output/files/${nombre_imagen}`;
+function ensureLocalRedemprendedores(localPath) {
+    const imageName = localPath.replace(/.*files\//, '');
+    return `/redemprendedores/output/files/${imageName}`;
 }
 
 function convertLocalPathToUrl(localPath) {
     if (!localPath) return './assets/images/placeholder.jpg';
     const baseUrl = window.location.origin;
     if (baseUrl.includes('localhost')) {
-        return ensurelocalredemprendedores(localPath);
+        return ensureLocalRedemprendedores(localPath);
     } else {
         return ensureRedemprendedoresPath(localPath);
     }

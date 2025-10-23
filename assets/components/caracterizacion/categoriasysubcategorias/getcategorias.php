@@ -1,24 +1,29 @@
 <?php
-@ini_set("display_errors", "1");
-require_once("../../include/dbcommon.php");
-header("Access-Control-Allow-Origin: *"); // Permitir todos los orígenes
-header("Content-Type: application/json"); // Establecer tipo de contenido
+@ini_set("display_errors", "0");
+error_reporting(0);
 
-// Obtener los datos de la solicitud
-$data = json_decode(file_get_contents('php://input'), true);
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json");
 
-
-$query = "select DISTINCT c.id_categoria, c.nombre FROM categoria c INNER JOIN productos p ON p.categoria = c.id_categoria WHERE p.estado = 1 and  c.estado = 1 ORDER BY c.nombre ASC;";
-$result = DB::Query($query);
-$response = array();
-
-if ($result) {
-    $categorias = array();
-    while ($row = $result->fetchAssoc()) {
-        $categorias[] = $row;
-    }
-    $response = array("categorias" => $categorias);
+try {
+    require_once("../../../../include/dbcommon.php");
+} catch (Exception $e) {
+    echo json_encode(['categorias' => []]);
+    exit;
 }
 
-// Devolver la respuesta al cliente
-echo json_encode($response);
+try {
+    $query = "select DISTINCT c.id_categoria, c.nombre FROM categoria c INNER JOIN productos p ON p.categoria = c.id_categoria WHERE p.estado = 1 and c.estado = 1 ORDER BY c.nombre ASC;";
+    $result = DB::Query($query);
+    $categorias = array();
+
+    if ($result) {
+        while ($row = $result->fetchAssoc()) {
+            $categorias[] = $row;
+        }
+    }
+
+    echo json_encode(["categorias" => $categorias]);
+} catch (Exception $e) {
+    echo json_encode(['categorias' => []]);
+}

@@ -1,31 +1,32 @@
 <?php
-@ini_set("display_errors", "1");
-require_once("../../include/dbcommon.php");
-header("Access-Control-Allow-Origin: *"); // Permitir todos los orígenes
-header("Content-Type: application/json"); // Establecer tipo de contenido
+@ini_set("display_errors", "0");
+error_reporting(0);
 
-// Obtener los datos de la solicitud
-$data = json_decode(file_get_contents('php://input'), true);
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json");
 
-$departamento = isset($data['departamento']) ? "'" . $data['departamento'] . "'" : 'NULL';
-
-// Construir la consulta para llamar al procedimiento almacenado
-$query = "select * from banner_publicitario  where departamento = $departamento AND estado = 1 LIMIT 1";
-$result = DB::Query( $query);
-$response = array();
-
-if ($result) {
-    $publicidad = array();
-    while ($row = $result->fetchAssoc()) {
-        $publicidad = $row;
-    }
-    $response = array("publicidad" => $publicidad);
-} else {
-    $response = array(
-        "status" => "error",
-        "message" => "Error al obtener los productos en oferta."
-    );
+try {
+    require_once("../../../include/dbcommon.php");
+} catch (Exception $e) {
+    echo json_encode(["publicidad" => []]);
+    exit;
 }
 
-// Devolver la respuesta al cliente
-echo json_encode($response);
+try {
+    $data = json_decode(file_get_contents('php://input'), true);
+    $departamento = isset($data['departamento']) ? "'" . $data['departamento'] . "'" : 'NULL';
+
+    $query = "select * from banner_publicitario where departamento = $departamento AND estado = 1 LIMIT 1";
+    $result = DB::Query($query);
+    $publicidad = array();
+
+    if ($result) {
+        while ($row = $result->fetchAssoc()) {
+            $publicidad = $row;
+        }
+    }
+
+    echo json_encode(["publicidad" => $publicidad]);
+} catch (Exception $e) {
+    echo json_encode(["publicidad" => []]);
+}

@@ -1,11 +1,28 @@
 <?php
-@ini_set("display_errors", "1");
-require_once(__DIR__ . "/../../../include/dbcommon.php");
+@ini_set("display_errors", "0");
+error_reporting(0);
+
+try {
+    require_once(__DIR__ . "/../../../include/dbcommon.php");
+} catch (Exception $e) {
+    header("Content-Type: application/json");
+    echo json_encode(['success' => false, 'error' => 'Database error']);
+    exit;
+}
+
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json");
 
-// Obtener los datos de la solicitud
-$data = json_decode(file_get_contents('php://input'), true);
+// Handle both POST and GET requests
+$data = [];
+$input = file_get_contents('php://input');
+if ($input) {
+    $postData = json_decode($input, true);
+    if ($postData) $data = $postData;
+}
+if (empty($data)) {
+    $data = ['limite' => 5, 'pagina' => 0, 'orden' => 'fecha_publicacion', 'direccion' => 'DESC'];
+}
 
 // Preparar parámetros
 $departamento = isset($data['departamento']) && !empty($data['departamento']) ? $data['departamento'] : NULL;
@@ -76,61 +93,51 @@ if ($fechaHasta !== NULL) {
 $offset = $pagina * $limite;
 $query .= " ORDER BY noticias.`$orden` $direccion LIMIT $limite OFFSET $offset";
 
-// Ejecutar consulta
-$result = DB::Query($query);
-$noticias = array();
+try {
+    // Ejecutar consulta
+    $result = DB::Query($query);
+    $noticias = array();
 
-if ($result) {
-    while ($row = $result->fetchAssoc()) {
-        $noticias[] = $row;
+    if ($result) {
+        while ($row = $result->fetchAssoc()) {
+            $noticias[] = $row;
+        }
     }
-}
 
-// Consulta para el total de registros (sin LIMIT, con filtros)
-$queryTotal = "
-SELECT COUNT(noticias.id) as total 
-FROM noticias
-LEFT JOIN categorias_noticias ON noticias.categoria = categorias_noticias.id
-WHERE 1=1";
+    // Consulta para el total de registros
+    $queryTotal = "SELECT COUNT(noticias.id) as total FROM noticias LEFT JOIN categorias_noticias ON noticias.categoria = categorias_noticias.id WHERE 1=1";
 
-// Aplicar los mismos filtros en la consulta de conteo
-if ($departamento !== NULL && $departamento !== 'TODOS') {
-    $queryTotal .= " AND noticias.departamento = '" . $departamento . "'";
-}
-if ($categoria !== NULL) {
-    $queryTotal .= " AND noticias.categoria = " . intval($categoria);
-}
-if ($buscar !== NULL) {
-    $queryTotal .= " AND (noticias.titulo LIKE '%" . $buscar . "%' OR noticias.contenido LIKE '%" . $buscar . "%')";
-}
+    if ($departamento !== NULL && $departamento !== 'TODOS') {
+        $queryTotal .= " AND noticias.departamento = '" . $departamento . "'";
+    }
+    if ($categoria !== NULL) {
+        $queryTotal .= " AND noticias.categoria = " . intval($categoria);
+    }
+    if ($buscar !== NULL) {
+        $queryTotal .= " AND (noticias.titulo LIKE '%" . $buscar . "%' OR noticias.contenido LIKE '%" . $buscar . "%')";
+    }
+    if ($fechaDesde !== NULL) {
+        $queryTotal .= " AND DATE(noticias.fecha_publicacion) >= '" . $fechaDesde . "'";
+    }
+    if ($fechaHasta !== NULL) {
+        $queryTotal .= " AND DATE(noticias.fecha_publicacion) <= '" . $fechaHasta . "'";
+    }
 
-// Filtros de fecha en la consulta de conteo
-if ($fechaDesde !== NULL) {
-    $queryTotal .= " AND DATE(noticias.fecha_publicacion) >= '" . $fechaDesde . "'";
-}
+    $resultTotal = DB::Query($queryTotal);
+    $total = 0;
+    if ($resultTotal && $rowTotal = $resultTotal->fetchAssoc()) {
+        $total = $rowTotal['total'];
+    }
 
-if ($fechaHasta !== NULL) {
-    $queryTotal .= " AND DATE(noticias.fecha_publicacion) <= '" . $fechaHasta . "'";
+    echo json_encode([
+        'success' => true,
+        'total' => $total,
+        'noticias' => $noticias
+    ]);
+} catch (Exception $e) {
+    echo json_encode([
+        'success' => false,
+        'error' => 'Database query error'
+    ]);
 }
-
-$resultTotal = DB::Query($queryTotal);
-$total = 0;
-if ($resultTotal && $rowTotal = $resultTotal->fetchAssoc()) {
-    $total = $rowTotal['total'];
-}
-
-// Devolver resultados
-echo json_encode([
-    'success' => true,
-    'total' => $total,
-    'noticias' => $noticias,
-    'debug' => [
-        'query' => $query,
-        'countQuery' => $queryTotal,
-        'parametros_recibidos' => $data,
-        'fechaDesde' => $fechaDesde,
-        'fechaHasta' => $fechaHasta,
-        'orden_corregido' => $orden
-    ]
-]);
 ?>
