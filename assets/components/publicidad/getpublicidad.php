@@ -1,6 +1,6 @@
 <?php
 @ini_set("display_errors", "1");
-require_once("../../../../include/dbcommon.php");
+require_once("../../include/dbcommon.php");
 header("Access-Control-Allow-Origin: *"); // Permitir todos los orígenes
 header("Content-Type: application/json"); // Establecer tipo de contenido
 
@@ -11,7 +11,7 @@ $departamento = isset($data['departamento']) ? "'" . $data['departamento'] . "'"
 
 // Construir la consulta para llamar al procedimiento almacenado
 $query = "select * from banner_publicitario  where departamento = $departamento AND estado = 1 LIMIT 1";
-$result = DB::Query(sql: $query);
+$result = DB::Query( $query);
 $response = array();
 
 if ($result) {

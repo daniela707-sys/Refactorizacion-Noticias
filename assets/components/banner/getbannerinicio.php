@@ -1,6 +1,6 @@
 <?php
 @ini_set("display_errors", "1");
-require_once("../../../../include/dbcommon.php");
+require_once("../../include/dbcommon.php");
 header("Access-Control-Allow-Origin: *"); // Permitir todos los orígenes
 header("Content-Type: application/json"); // Establecer tipo de contenido
 

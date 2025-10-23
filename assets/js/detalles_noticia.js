@@ -328,7 +328,7 @@ function generarHTMLUltimasPublicaciones(noticias) {
                 </div>
                 <div class="sidebar__post-content">
                     <h3>
-                        <a href="details_noticia.php?id=${noticia.id}">${titulo}</a>
+                        <a href="detalle_noticia.php?id=${noticia.id}">${titulo}</a>
                     </h3>
                 </div>
             </li>
@@ -776,7 +776,7 @@ function cargarNoticiasRelacionadas(noticiaActual) {
                         `;
 
                         article.addEventListener('click', () => {
-                            window.location.href = `details_noticia.php?id=${noticia.id}`;
+                            window.location.href = `detalle_noticia.php?id=${noticia.id}`;
                         });
 
                         cardsContainer.appendChild(article);

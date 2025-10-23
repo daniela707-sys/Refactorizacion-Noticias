@@ -5,6 +5,17 @@ $username = "root";
 $password = ""; // XAMPP por defecto no tiene contraseña
 $dbname = "red_emprendedores_noticias";
 
+// Verificar si mysqli está disponible
+if (!extension_loaded('mysqli')) {
+    http_response_code(500);
+    echo json_encode([
+        'success' => false,
+        'error' => 'Extensión mysqli no disponible',
+        'message' => 'La extensión mysqli de PHP no está habilitada'
+    ]);
+    exit;
+}
+
 class DB {
     private static $conn = null;
     
@@ -84,5 +95,16 @@ try {
     // En caso de error, crear una conexión mock para evitar errores fatales
     $conn = null;
     error_log("Error de base de datos: " . $e->getMessage());
+    
+    // Enviar respuesta JSON de error si estamos en un endpoint API
+    if (isset($_SERVER['HTTP_CONTENT_TYPE']) && $_SERVER['HTTP_CONTENT_TYPE'] === 'application/json') {
+        http_response_code(500);
+        echo json_encode([
+            'success' => false,
+            'error' => 'Error de conexión a la base de datos',
+            'message' => 'No se pudo conectar a la base de datos. Verifique la configuración.'
+        ]);
+        exit;
+    }
 }
 ?>

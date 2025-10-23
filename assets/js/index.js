@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
         fechaDesdeFiltro = fechaDesdeURL || '';
         fechaHastaFiltro = fechaHastaURL || '';
 
-        // Establecer valores en campos
+        // Establecer valores en campos - con verificación de existencia
         const campoBusqueda = document.getElementById('buscador');
         if (campoBusqueda && busquedaFiltro) {
             campoBusqueda.value = busquedaFiltro;
@@ -217,7 +217,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     `;
 
                         newsItem.addEventListener('click', () => {
-                            window.location.href = `details_noticia.php?id=${noticia.id}`;
+                            window.location.href = `detalle_noticia.php?id=${noticia.id}`;
                         });
 
                         newsGrid.appendChild(newsItem);
@@ -337,10 +337,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const current = document.getElementById('nombre_departamento');
         const list = document.getElementById('departamento-list');
+        
+        // Verificar que los elementos existan antes de continuar
+        if (!current || !list) {
+            console.warn('Elementos de departamento no encontrados en el DOM');
+            return;
+        }
 
         // Mostrar el departamento del TOKEN como valor por defecto
         const departamentoOriginal = localStorage.getItem('departamento') || 'TODOS';
-        if (current) current.textContent = departamentoOriginal;
+        current.textContent = departamentoOriginal;
 
         fetch('assets/components/caracterizacion/departamentos/departamentos.php')
             .then(response => response.json())
@@ -381,10 +387,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 list.innerHTML = '<li data-value="TODOS" class="option selected">TODOS</li>';
             });
 
-        // Configurar eventos de clic
-        document.querySelector('.nice-select').addEventListener('click', function () {
-            this.classList.toggle('open');
-        });
+        // Configurar eventos de clic - con verificación
+        const niceSelect = document.querySelector('.nice-select');
+        if (niceSelect) {
+            niceSelect.addEventListener('click', function () {
+                this.classList.toggle('open');
+            });
+        }
 
         // Event listener para selección
         list.addEventListener('click', function (event) {
@@ -404,11 +413,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Cerrar dropdown al hacer clic fuera
         document.addEventListener('click', function (event) {
-            if (!departamentoContainer.contains(event.target)) {
-                document.querySelector('.nice-select').classList.remove('open');
+            const niceSelect = document.querySelector('.nice-select');
+            if (niceSelect && !departamentoContainer.contains(event.target)) {
+                niceSelect.classList.remove('open');
             }
         });
     }
+    
 
     // Función auxiliar para actualizar selección visual
     function actualizarSeleccionDepartamento(departamentoSeleccionado) {

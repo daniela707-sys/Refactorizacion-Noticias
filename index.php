@@ -53,9 +53,7 @@
   <link rel="stylesheet" href="assets/css/ogenix-responsive.css">
 
 
-  <!-- Incluye los scripts de Bootstrap -->
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 
 
 </head>
@@ -75,11 +73,10 @@
   ?>
   <div>
     <!--Subscribe modal-->
-    <?php require_once "assets/layout/offerofday.php"; ?>
     <!--Subscribe header-->
     <?php require_once "assets/layout/header.php"; ?>
     <!--Subscribe contenido-->
-    <?php require_once "assets/components/index.php"; ?>
+    <?php require_once "assets/components/noticias_handler.php"; ?>
     <!--Subscribe One Start-->
     <?php require_once "assets/layout/subscribe.php"; ?>
     <!--Subscribe One End-->
@@ -88,9 +85,11 @@
 
 
 
-  <script src="assets/js/index.js"></script>
+  <!-- jQuery debe cargarse ANTES que Bootstrap -->
   <script src="assets/vendors/jquery/jquery-3.6.0.min.js"></script>
   <script src="assets/vendors/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/js/dom-utils.js"></script>
+  <script src="assets/js/index.js"></script>
   <script src="assets/vendors/jarallax/jarallax.min.js"></script>
   <script src="assets/vendors/jquery-ajaxchimp/jquery.ajaxchimp.min.js"></script>
   <script src="assets/vendors/jquery-appear/jquery.appear.min.js"></script>
@@ -129,13 +128,17 @@
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('load', function() {
-      document.querySelector('.preloader').classList.add('hide');
-      document.querySelector('.page-wrapper').classList.add('loaded');
+      const preloader = document.querySelector('.preloader');
+      const pageWrapper = document.querySelector('.page-wrapper');
+      if (preloader) preloader.classList.add('hide');
+      if (pageWrapper) pageWrapper.classList.add('loaded');
     });
 
     setTimeout(function() {
-      document.querySelector('.preloader').classList.add('hide');
-      document.querySelector('.page-wrapper').classList.add('loaded');
+      const preloader = document.querySelector('.preloader');
+      const pageWrapper = document.querySelector('.page-wrapper');
+      if (preloader) preloader.classList.add('hide');
+      if (pageWrapper) pageWrapper.classList.add('loaded');
     }, 3000);
   });
 </script>
